@@ -47,43 +47,37 @@
   <cfprocessingdirective pageencoding = "utf-8">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
   <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
+  <script src="js/lodash.js"></script>
   <cfquery name="qGetMunicipioName" datasource="cc_gasolina">
     select Nombre 
     from Municipio with (nolock)
     where estadoid = <cfqueryparam cfsqltype="cf_sql_integer" value="#url.estadoid#">
           and id= <cfqueryparam cfsqltype="cf_sql_integer" value="#url.municipioID#">
   </cfquery>
-  <nav class="navbar navbar-light bg-faded">
-    <a class="navbar-brand" href="#">
-      <img src="img/ic_on.png" width="50" height="50" class="d-inline-block align-middle" alt="">
-    </a>
-    <a class="navbar-brand" href="#"><cfoutput>#qGetMunicipioName.nombre#</cfoutput></a>
-  </nav>
-  <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Combustibles</th>
-            </tr>
-        </thead> 
-    </table>
-
-  <script>
-    $( document ).ready(function() {
-        $('#example').DataTable({
-          pageLength : 200,
-          processing: true,
-          serverSide: true, 
-          ajax: {
-            <cfoutput>url: 'api.cfm?mode=getPrecio&estadoid=#url.estadoid#&municipioid=#url.municipioid#',</cfoutput>
-          } 
-        });
-    });
-    $('#example_length').hide()
-  </script>
-
+  <style>
+  </style>
+  <body>
+   
+    <div class="main-panel">
+      <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Combustibles</th>
+                </tr>
+            </thead> 
+      </table>
+    </div>
+    <script>
+     <cfoutput>var #toScript(url.estadoid, "jsEstadoID")#var #toScript(url.municipioid, "jsMunID")#</cfoutput>
+    </script>
+    <script src="js/precio.js">
+    </script>    
+    <cfinclude template="template.cfm">
+  </body>
 </cfif>
 
+<cfabort>
 <button id="btnEdo">Borrar Edo</button>
 <button id="btnMun">Borrar Mun</button>
 <button id="btnAll">Borrar Todo</button>

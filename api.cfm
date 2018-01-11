@@ -28,7 +28,7 @@
 	<cfparam name="url.municipioID" default="0">
 	<cfif url.estadoid neq 0 and url.municipioID neq 0>
 		<cfquery name="qGetData" datasource="cc_gasolina"><!------>
-			select   valor, gs.subproducto, g.nombre, g.direccion,p.fechaaplicacion,g.id
+			select   g.nombre, g.direccion,valor,p.fechaaplicacion,g.id,cast(gs.subproducto as varchar(max)) collate SQL_Latin1_General_Cp1251_CS_AS as subproducto 
 			into ##temp
 			from precio p with (nolock)
 			Inner join gasolinera g with (nolock) ON g.id = p.idGasolinera
@@ -47,10 +47,17 @@
 			execute(@query)
 			drop table ##temp
 	    </cfquery>
-		<cfheader charset="utf-8" name="Content-Type" value="application/json">
+		<cfheader charset="utf-8" name="Content-Type" value="application/json">   
+		<cfprocessingdirective pageencoding = "utf-8">
+		<cfset myGasolinalist ="">
+		<cfloop list="#qGetData.columnList#" index="col">
+			<cfif col neq "DIRECCION" and col neq "NOMBRE" and col neq "FECHAAPLICACION" and col neq "ID">
+				<cfset myGasolinalist= listAppend(myGasolinalist, col,",")>
+			</cfif>
+			
+		</cfloop>
 	   <cfoutput>
 	    {	
-
 			"draw":1,
 			"recordsTotal": #qGetData.recordcount#,
   			"recordsFiltered": #qGetData.recordcount#,
@@ -59,10 +66,20 @@
 				<cfset counter = 1>
 				<cfoutput query="qGetData">
 					<cfif counter neq 1>,</cfif>
-					[
-						"#jsStringFormat(qGetData.direccion)#",
-						"#jsStringFormat(qGetData.nombre)#"
-					]
+					{
+						"gasolina": {
+							"direccion":"#jsStringFormat(qGetData.direccion)#",
+							"nombre":"#jsStringFormat(qGetData.nombre)#",
+							"id":"#qGetData.id#"
+							
+						},
+						"precio": {
+							"fechaaplicacion":"#jsStringFormat(qGetData.fechaaplicacion)#"
+							<cfloop list="#myGasolinalist#" item="i">
+							,"#jsStringFormat(i)#":"#qgetdata['#i#']['#counter#']#"
+							</cfloop>
+						}
+					}
 					<cfset counter++>
 				</cfoutput>
 			]
