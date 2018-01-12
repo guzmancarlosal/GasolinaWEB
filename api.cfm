@@ -24,17 +24,30 @@
 		<cfoutput>#dataJSON#</cfoutput>
 	</cfif>
 <cfelseif url.mode eq "getPrecio">
+	<cfoutput>#SetLocale("Spanish (Modern)")#</cfoutput>
+	<cfcontent reset="true">
 	<cfparam name="url.estadoID" default="0">
 	<cfparam name="url.municipioID" default="0">
+	<cfparam name="url.listMode" default="">
+	<cfparam name="url.FavList" default="0">
 	<cfif url.estadoid neq 0 and url.municipioID neq 0>
 		<cfquery name="qGetData" datasource="cc_gasolina"><!------>
-			select   g.nombre, g.direccion,valor,p.fechaaplicacion,g.id,cast(gs.subproducto as varchar(max)) collate SQL_Latin1_General_Cp1251_CS_AS as subproducto 
+			select   g.nombre, g.direccion,valor,p.fechaaplicacion, g.id,cast(lower(gs.subproducto) as varchar(max)) collate SQL_Latin1_General_Cp1251_CS_AS as subproducto 
 			into ##temp
 			from precio p with (nolock)
 			Inner join gasolinera g with (nolock) ON g.id = p.idGasolinera
 			Inner join gasolina gs with (nolock) ON gs.id = p.idgasolina
-			where g.idestado = <cfqueryparam cfsqltype="cf_sql_integer" value="#url.estadoid#">
+			where
+				<cfif url.listMode eq ""> 
+					g.idestado = <cfqueryparam cfsqltype="cf_sql_integer" value="#url.estadoid#">
 					and g.idmunicipio= <cfqueryparam cfsqltype="cf_sql_integer" value="#url.municipioID#">
+				<cfelse>
+					g.id IN ( <cfqueryparam 
+		                value="#url.FavList#" 
+		                cfsqltype="CF_SQL_INTEGER"
+		                list="yes" 
+		                /> )
+				</cfif>
 
 			DECLARE @cols  AS NVARCHAR(MAX)='';
 			DECLARE @query AS NVARCHAR(MAX)='';
@@ -74,9 +87,11 @@
 							
 						},
 						"precio": {
-							"fechaaplicacion":"#jsStringFormat(qGetData.fechaaplicacion)#"
+							"fechaaplicacion":"#dateformat(qGetData.fechaaplicacion,"dd-mmm-yyyy")#"
 							<cfloop list="#myGasolinalist#" item="i">
-							,"#jsStringFormat(i)#":"#qgetdata['#i#']['#counter#']#"
+								<cfif #qgetdata['#i#']['#counter#']# neq "">
+								,"#jsStringFormat(LCase(i))#":"#qgetdata['#i#']['#counter#']#"
+								</cfif>
 							</cfloop>
 						}
 					}

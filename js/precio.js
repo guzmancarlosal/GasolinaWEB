@@ -10,7 +10,7 @@ $( document ).ready(function() {
       searching: false,
       ordering: false,
       ajax: {
-        url: 'api.cfm?mode=getPrecio&estadoid='+jsEstadoID+'&municipioid='+jsMunID,
+        url: 'api.cfm?mode=getPrecio&estadoid='+jsEstadoID+'&municipioid='+jsMunID+'&listMode='+listMode,
       },
       createdRow: function ( row, data, index ) {
         var gasCell = linkTemplate({
