@@ -1,0 +1,20 @@
+   .precioheader { text-transform: capitalize;} 
+    .bg-inverse {background-color: #668178 !important;}
+    .navbar {margin-bottom:0px;}
+    .navbar-inverse {background-color: #222;border-color: #668178;}
+    .navbar-inverse .navbar-brand {color: #ffffff;}
+    .logo { position:absolute;left:5px;top:20px;margin: 0px 15px 15px 0px;}
+    .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover{background-color: #668178 !important;}
+
+.navbar-brand {
+	height: 70px;
+}
+.table-borderless td,
+.table-borderless th {
+    border: 0;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #668178;
+    border-color: #668178;
+}

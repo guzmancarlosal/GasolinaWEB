@@ -28,8 +28,7 @@
 	<cfcontent reset="true">
 	<cfparam name="url.estadoID" default="0">
 	<cfparam name="url.municipioID" default="0">
-	<cfparam name="url.listMode" default="">
-	<cfparam name="url.FavList" default="0">
+	<cfparam name="form.favList" default="">
 	<cfif url.estadoid neq 0 and url.municipioID neq 0>
 		<cfquery name="qGetData" datasource="cc_gasolina"><!------>
 			select   g.nombre, g.direccion,valor,p.fechaaplicacion, g.id,cast(lower(gs.subproducto) as varchar(max)) collate SQL_Latin1_General_Cp1251_CS_AS as subproducto 
@@ -38,12 +37,12 @@
 			Inner join gasolinera g with (nolock) ON g.id = p.idGasolinera
 			Inner join gasolina gs with (nolock) ON gs.id = p.idgasolina
 			where
-				<cfif url.listMode eq ""> 
+				<cfif form.favList eq ""> 
 					g.idestado = <cfqueryparam cfsqltype="cf_sql_integer" value="#url.estadoid#">
 					and g.idmunicipio= <cfqueryparam cfsqltype="cf_sql_integer" value="#url.municipioID#">
 				<cfelse>
 					g.id IN ( <cfqueryparam 
-		                value="#url.FavList#" 
+		                value="#form.favList#" 
 		                cfsqltype="CF_SQL_INTEGER"
 		                list="yes" 
 		                /> )
@@ -60,6 +59,7 @@
 			execute(@query)
 			drop table ##temp
 	    </cfquery>
+
 		<cfheader charset="utf-8" name="Content-Type" value="application/json">   
 		<cfprocessingdirective pageencoding = "utf-8">
 		<cfset myGasolinalist ="">
@@ -69,35 +69,34 @@
 			</cfif>
 			
 		</cfloop>
-	   <cfoutput>
+	  
 	    {	
-			"draw":1,
-			"recordsTotal": #qGetData.recordcount#,
-  			"recordsFiltered": #qGetData.recordcount#,
-			</cfoutput>
-			"data": [
+			
 				<cfset counter = 1>
 				<cfoutput query="qGetData">
 					<cfif counter neq 1>,</cfif>
-					{
-						"gasolina": {
+
+						"gasolinera#counter#": {
 							"direccion":"#jsStringFormat(qGetData.direccion)#",
 							"nombre":"#jsStringFormat(qGetData.nombre)#",
-							"id":"#qGetData.id#"
+							"id":"#qGetData.id#",
+							"fechaaplicacion":"#dateformat(qGetData.fechaaplicacion,"dd-mmm-yyyy")#",
+							"precio": {
+								"i":"1"
+								<cfloop list="#myGasolinalist#" item="i">
+									<cfif #qgetdata['#i#']['#counter#']# neq "">
+									,"#jsStringFormat(LCase(i))#":"#qgetdata['#i#']['#counter#']#"
+									</cfif>
+								</cfloop>
+							}
+
 							
-						},
-						"precio": {
-							"fechaaplicacion":"#dateformat(qGetData.fechaaplicacion,"dd-mmm-yyyy")#"
-							<cfloop list="#myGasolinalist#" item="i">
-								<cfif #qgetdata['#i#']['#counter#']# neq "">
-								,"#jsStringFormat(LCase(i))#":"#qgetdata['#i#']['#counter#']#"
-								</cfif>
-							</cfloop>
 						}
-					}
+						
 					<cfset counter++>
 				</cfoutput>
-			]
+			
+
 		}
 
 		<cfabort>
