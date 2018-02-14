@@ -6,8 +6,10 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" ></script>
-<script src="js\bootbox.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
 <link rel="stylesheet" href="css/precio.css">
+<script src="js\bootbox.min.js"></script>
+
 <cfif url.estadoID eq 0 and url.municipioID eq 0>
   <script>
   	$( document ).ready(function() {
@@ -57,7 +59,7 @@
   </script>
 <cfelse>
  <cfprocessingdirective pageencoding = "utf-8">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
+
   <script src="js/lodash.js"></script>
   <cfquery name="qGetMunicipioName" datasource="cc_gasolina">
     select Nombre 
@@ -73,7 +75,7 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="##navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="##"><img class="logo" src="img/gassmall.png" width="30" height="30"><h1>&nbsp;&nbsp;&nbsp; Precio Gasolina</h1></a>
+        <a class="navbar-brand" href="##"><img class="logo" src="img/gassmall.png" width="30" height="30">&nbsp;&nbsp;&nbsp; Precio Gasolina México</a>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <ul class="navbar-nav mr-auto">
               <li class="nav-item active">

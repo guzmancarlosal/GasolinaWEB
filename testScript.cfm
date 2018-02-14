@@ -91,7 +91,7 @@
 		<cfdump var="#stcgasolinera#">
 	<cfelseif url.mode eq "getPrecioDiario">
 		<cfsetting requesttimeout="240">
-		<!---
+		
 		<cfhttp
 		    url="http://api-reportediario.cre.gob.mx/api/EstacionServicio/Petroliferos?entidadId=&municipioId=&_=1514402356616"
 		    method="get"
@@ -157,8 +157,11 @@
 					values #PreserveSingleQuotes(queryScript)#
 				</cfquery>
 			</cfif>
+		<cfmail to="carlosaguzman@gmail.com" from="GasolinaApp" subject="Task runned" type="html">
+			taks ran at <cfoutput>#now()#</cfoutput>
+		</cfmail>
 		<cfsetting showdebugoutput="true">
---->
+
 
 	</cfif>
 <cfcatch><cfdump var="#cfcatch#"></cfcatch>

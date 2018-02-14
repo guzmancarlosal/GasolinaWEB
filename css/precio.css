@@ -18,3 +18,16 @@
     background-color: #668178;
     border-color: #668178;
 }
+.modal-open .modal {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+.modal {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2.25rem + 10px);
+}

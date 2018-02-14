@@ -1,8 +1,11 @@
 <cfparam name="url.estadoID" default="0">
 <cfparam name="url.municipioID" default="0">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
-<script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" ></script>
 <script src="js/lodash.js"></script>
+ <cfprocessingdirective pageencoding = "utf-8">
+
 <style>
   i { text-transform: capitalize; } 
   .bg-inverse {background-color: #668178 !important;}
@@ -17,3 +20,8 @@
       <a class="navbar-brand" href="precio.cfm?estadoID=#url.estadoID#&municipioID=#url.municipioID#">&nbsp;&nbsp;&nbsp; <i class="glyphicon glyphicon-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Atras</a>
     </cfoutput>
 </nav>
+<div class="jumbotron">
+  <div class="container text-center">
+   La sección de estadísticas esta bajo construcción,
+  </div>
+</div>

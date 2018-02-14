@@ -1,5 +1,6 @@
+<cfprocessingdirective pageencoding = "utf-8">
 <script type="text/template" id="tmpl_gasolinera" class="template">
-	<h4><a href="https://www.google.com.mx/maps/place/<%=obj.direccion%> <%=obj.nombre%>" target="_blank"><img src="img/gmsmall.png" height="40" width="40"></a> <%=obj.direccion%> <b><%=obj.nombre%></b></h4> 
+	<h4><a href="https://www.google.com.mx/maps/place/<%=obj.direccion%> <%=obj.nombre%>" target="_blank"><img src="img/gmsmall.png" height="40" width="40"> <b><%=obj.nombre%></b><br><i><%=obj.direccion%></i> </a></h4> 
 	<% if (_.includes(isFav, obj.id)) {%>
 		<button type="button" class="btn btn-default btn-md" id="btn<%=obj.id%>" onclick="remFav('<%=obj.id%>');">
 			<span class="glyphicon glyphicon-star" aria-hidden="true" ></span>Quitar Favorito
@@ -25,7 +26,8 @@
 		</tr>
 		<tr>
 			<td colspan="<%=loopCounter%>">
-				<b>Fecha de reporte</b>:<span  style="color:red;"> <%=obj.fechaaplicacion%></span>
+				<b>Fecha de reporte</b>:<span  style="color:red;"> <%=obj.fechaaplicacion%><br></span>
+				Fuente: CRE (Comisión Reguladora de Energía)
 			</td>
 		</tr>
 	</table><br><br>

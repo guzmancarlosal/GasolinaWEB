@@ -31,9 +31,20 @@
 	<cfparam name="form.favList" default="">
 	<cfif url.estadoid neq 0 and url.municipioID neq 0>
 		<cfquery name="qGetData" datasource="cc_gasolina"><!------>
-			select   g.nombre, g.direccion,valor,p.fechaaplicacion, g.id,cast(lower(gs.subproducto) as varchar(max)) collate SQL_Latin1_General_Cp1251_CS_AS as subproducto 
+			IF object_id('tempdb..##temp') IS NOT NULL
+			DROP TABLE ##temp 
+			select d.fechaaplicacion, g.nombre, g.direccion,p.valor,
+				g.id,cast(lower(gs.subproducto) as varchar(max)) collate SQL_Latin1_General_Cp1251_CS_AS as subproducto 
 			into ##temp
-			from precio p with (nolock)
+			from precio  p 
+			inner join (
+				select idGasolinera, max(fechaaplicacion) as fechaaplicacion
+			    from precio with (nolock)
+				Inner join gasolinera  with (nolock) ON gasolinera.id = precio.idGasolinera
+				where gasolinera.idestado = <cfqueryparam cfsqltype="cf_sql_integer" value="#url.estadoid#"> 
+				and gasolinera.idmunicipio= <cfqueryparam cfsqltype="cf_sql_integer" value="#url.municipioID#">
+			    group by idGasolinera
+				) d ON d.idGasolinera = p.idGasolinera
 			Inner join gasolinera g with (nolock) ON g.id = p.idGasolinera
 			Inner join gasolina gs with (nolock) ON gs.id = p.idgasolina
 			where
@@ -59,6 +70,7 @@
 			execute(@query)
 			drop table ##temp
 	    </cfquery>
+
 
 		<cfheader charset="utf-8" name="Content-Type" value="application/json">   
 		<cfprocessingdirective pageencoding = "utf-8">
